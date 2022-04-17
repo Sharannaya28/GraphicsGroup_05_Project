@@ -1,3 +1,612 @@
+#include <windows.h>  // for MS Windows
+#include <GL/glut.h> // GLUT, include glu.h and gl.h
+#include <math.h>
+#include <iostream>
+#include <cstring>
+#include <stdlib.h> //random-num
+
+using namespace std;
+
+
+
+int _angle1 = 0;
+int _carMove = 0;
+int _carangle = 0;
+float _angle2 = 1;
+int _planeMove = 0;
+bool isDay = true;
+bool fullscreen = true;
+bool isCarMoving = true;
+
+void handleKeypress(unsigned char key, int x, int y)
+{
+    switch (key)
+    {
+    case 'd':
+        isDay = true;
+        glutPostRedisplay();
+        break;
+    case 'n':
+        isDay = false;
+        glutPostRedisplay();
+        break;
+    case 'f': //toggle screenmode
+        fullscreen = !fullscreen;
+        if (fullscreen)
+        {
+            glutFullScreen();
+        }
+        else
+        {
+            glutReshapeWindow(600, 600);
+            glutPositionWindow(0, 0);
+        }
+        break;
+    case 'x':
+        isCarMoving = !isCarMoving;
+        glutPostRedisplay();
+        break;
+    }
+}
+
+float TireRotateAngle = 0.0f;
+float TruckTireRotateAngle = 0.0f;
+int _TruckMoveReverse = 0;
+
+void TruckTire(int xx, int yy, float r) //C029//H103
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 0.0f);
+    glRotatef(TireRotateAngle, 0.0f, 0.0f, 1.0f);
+    glTranslatef(-0.0f, -0.0f, 0.0f);
+    glBegin(GL_POLYGON); // Draw a Red 1x1 Square centered at origin
+    for (int i = 0; i < 200; i++)
+    {
+        float pi = 3.1416;
+        float A = (i * 2 * pi) / 200;
+        float x = r * cos(A);
+        float y = r * sin(A);
+        glVertex2f(x + xx, y + yy);
+    }
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3ub(0, 0, 0); //black-rim
+    glVertex2f(-0.075, 0);
+    glVertex2f(0.075, 0);
+
+    glVertex2f(-0.05, -0.075);
+    glVertex2f(0.05, 0.075);
+
+    glVertex2f(0.05, -0.075);
+    glVertex2f(-0.05, 0.075);
+
+    glVertex2f(0, -0.1);
+    glVertex2f(0, 0.1);
+
+    glEnd();
+
+    glPopMatrix();
+}
+void TruckScaledTire()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(140.1, 95, 0);
+    glScalef(90, 90, 0);
+    glColor3ub(0, 0, 0); //black-tire
+    TruckTire(0, 0, 0.2);
+    glColor3ub(192, 192, 192); //silver-tire-rim
+    TruckTire(0, 0, 0.13);
+    glColor3ub(211, 211, 255); //grey-tire-rim
+    TruckTire(0, 0, 0.09);
+    glPopMatrix();
+}
+
+void TruckBody()
+{
+    glColor3f(0, 0, 0.1373); //blue-body
+    glBegin(GL_POLYGON);
+    glVertex2f(150, 152);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(240, 127);
+    glVertex2f(240, 92);
+    glVertex2f(150, 92);
+    glEnd();
+
+    glBegin(GL_POLYGON); //trolly
+    glVertex2f(150, 129);
+    glVertex2f(60, 129);
+    glVertex2f(60, 92);
+    glVertex2f(150, 92);
+    glEnd();
+    glBegin(GL_POLYGON);      //trolly-cargo
+    glColor3ub(169, 120, 53); //brown
+    glVertex2f(70, 129);
+    glVertex2f(100, 129);
+    glVertex2f(100, 152);
+    glVertex2f(70, 152);
+    glEnd();
+
+    glColor3ub(9, 12, 53); //black
+
+    glBegin(GL_POLYGON); //back-light
+    glColor3ub(255, 0, 0);
+    glVertex2f(110 - 50, 92);
+    glVertex2f(115 - 50, 92);
+    glVertex2f(115 - 50, 117);
+    glVertex2f(110 - 50, 117);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window
+    glColor3ub(0, 0, 0); //black-window-in=day
+    if (!isDay)
+        glColor3ub(163, 228, 215); //gray-window-in-night
+    glVertex2f(150, 152);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(210, 127);
+    glVertex2f(150, 127);
+    glVertex2f(130, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-Divider
+    glColor3ub(192, 192, 192);
+    glVertex2f(170, 152);
+    glVertex2f(165, 152);
+    glVertex2f(165, 127);
+    glVertex2f(170, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON); //roof-plate
+    glColor3ub(168, 169, 173);
+
+    glVertex2f(150, 152);
+    glVertex2f(190, 152);
+    glVertex2f(185, 157);
+    glVertex2f(150, 157);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-holder-front
+    glColor3ub(168, 169, 173);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(210, 127);
+    glVertex2f(185, 152);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-holder-back
+    glColor3ub(168, 169, 173);
+    glVertex2f(140 + 20 - 10, 157);
+    glVertex2f(115 + 20, 127);
+    glVertex2f(125 + 20, 127);
+    glVertex2f(140 + 20 - 10, 152);
+    glEnd();
+
+    glBegin(GL_POLYGON); //foot-holder
+    glColor3ub(168, 169, 173);
+    glVertex2f(242, 92);
+    glVertex2f(60, 92);
+    glVertex2f(60, 97);
+    glVertex2f(242, 97);
+
+    glEnd();
+
+    glBegin(GL_POLYGON); //mirror
+    glColor3f(0, 0, 0.1373);
+    glVertex2f(211.5, 134.5);
+    glVertex2f(204.5, 135.5);
+    glVertex2f(203.5, 129);
+    glVertex2f(210.5, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON);      //Yellow-headlight
+    glColor3f(1.0, 1.0, 0.0); //body
+    glVertex2f(210.5 + 28, 134.5 - 10);
+    glVertex2f(203.5 + 28, 135.5 - 10);
+    glVertex2f(203.5 + 28, 129 - 10);
+    glVertex2f(210.5 + 28, 127 - 10);
+    glEnd();
+    if (!isDay)
+    {
+        glBegin(GL_POLYGON);      //Yellow-headlight
+        glColor3f(1.0, 1.0, 1.0); //body
+        glVertex2f(210.5 + 28 + 90, 134.5 - 10 - 0);
+        glVertex2f(205.5 + 28, 134.5 - 10);
+        glColor3f(0.8, 0.9, 0.0);
+        glVertex2f(205.5 + 28, 127 - 10);
+        glVertex2f(210.5 + 28 + 90, 127 - 10 - 30);
+        glEnd();
+    }
+
+    glBegin(GL_POLYGON); //window-opener-1
+    glColor3ub(192, 192, 192);
+    glVertex2f(150 - 15 - 5 + 20, 127 - 5 - 3);
+    glVertex2f(155 - 5 - 5 + 20, 127 - 5 - 3);
+    glVertex2f(155 - 5 - 5 + 20, 129 - 5);
+    glVertex2f(150 - 15 - 5 + 20, 129 - 5);
+    glEnd();
+    glBegin(GL_POLYGON); //window-opener-2
+    glColor3ub(192, 192, 192);
+    glVertex2f(150 - 15 + 40, 127 - 5 - 3);
+    glVertex2f(155 - 5 + 40, 127 - 5 - 3);
+    glVertex2f(155 - 5 + 40, 129 - 5);
+    glVertex2f(150 - 15 + 40, 129 - 5);
+    glEnd();
+}
+void TruckThrust()
+{
+    if (isDay)
+    {
+        glBegin(GL_POLYGON);
+        glColor3ub(168, 169, 173);
+        glVertex2f(110 - 50, 92);
+        glColor3ub(255, 255, 255);
+        glVertex2f(00 - 50, 80);
+        glVertex2f(00 - 50, 110);
+        glColor3ub(0, 0, 0);
+        glVertex2f(110 - 50, 97);
+        glEnd();
+    }
+}
+void fullTruck()
+{
+    TruckBody();
+    glPushMatrix();
+    glTranslatef(65, 0, 0);
+    TruckScaledTire();
+    glTranslatef(-85, 0, 0);
+    TruckScaledTire();
+    glPopMatrix();
+}
+void TruckReverse()
+{
+    glLineWidth(1);
+    glTranslatef(-100.5, 0, 0);
+    fullTruck();
+}
+void ScaledTruckReverse()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(500, 140, 0);
+    glScalef(-0.5, 0.5, 0);
+    TruckReverse();
+    glPopMatrix();
+}
+void MovingScaledTruckReverse()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(500, -80, 0);
+    glTranslatef(_TruckMoveReverse % 2000, 0, 0);
+
+    ScaledTruckReverse();
+    glPopMatrix();
+}
+void TruckTireRotate(int value)   //I010, I022
+{
+    if (isCarMoving) { TruckTireRotateAngle -= 5.0f; }
+    glutPostRedisplay(); //Notify GLUT that the display has changed
+
+    glutTimerFunc(05, TruckTireRotate, 0); //Notify GLUT to call update again in 25 milliseconds
+}
+
+void MoveTruckReverse(int value)   //I010 , I022
+{
+    if (isCarMoving) {
+        _TruckMoveReverse -= 1;
+    }
+
+
+    glutPostRedisplay();
+    glutTimerFunc(20, MoveTruckReverse, 0);
+}
+
+void CarTire(int xx, int yy, float r) //C028//V048//L066//H102
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 0.0f);
+    glRotatef(TireRotateAngle, 0.0f, 0.0f, 1.0f);
+    glTranslatef(-0.0f, -0.0f, 0.0f);
+    glBegin(GL_POLYGON); // Draw a Red 1x1 Square centered at origin
+    for (int i = 0; i < 200; i++)
+    {
+        float pi = 3.1416;
+        float A = (i * 2 * pi) / 200;
+        // float r = 4.0f;
+        float x = r * cos(A);
+        float y = r * sin(A);
+        glVertex2f(x + xx, y + yy);
+    }
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3ub(0, 0, 0); //black-rim
+    glVertex2f(-0.075, 0);
+    glVertex2f(0.075, 0);
+
+    glVertex2f(-0.05, -0.075);
+    glVertex2f(0.05, 0.075);
+
+    glVertex2f(0.05, -0.075);
+    glVertex2f(-0.05, 0.075);
+
+    glVertex2f(0, -0.1);
+    glVertex2f(0, 0.1);
+
+    glEnd();
+
+    glPopMatrix();
+}
+void ScaledTire()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(140.1, 95, 0);
+    glScalef(80, 80, 0);
+    glColor3ub(0, 0, 0); //black-tire
+    CarTire(0, 0, 0.2);
+    glColor3ub(192, 192, 192); //silver-tire-rim
+    CarTire(0, 0, 0.13);
+    glColor3ub(211, 211, 255); //grey-tire-rim
+    CarTire(0, 0, 0.09);
+    glPopMatrix();
+}
+
+void CarBody()
+{
+    glColor3f(0.1373, 0.5725, 0.5529); //body
+    glBegin(GL_POLYGON);
+    glVertex2f(140, 152);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(240, 127);
+    glVertex2f(240, 92);
+    glVertex2f(110, 92);
+    glVertex2f(110, 127);
+    glVertex2f(130, 127);
+    glVertex2f(140, 152);
+    glEnd();
+
+    glBegin(GL_POLYGON); //back-light
+    glColor3ub(255, 0, 0);
+    glVertex2f(110, 92);
+    glVertex2f(115, 92);
+    glVertex2f(115, 117);
+    glVertex2f(110, 117);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window
+    glColor3ub(0, 0, 0); //black-window-in=day
+    if (!isDay)
+        glColor3ub(163, 228, 215); //gray-window-in-night
+
+    glVertex2f(140, 152);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(210, 127);
+    glVertex2f(120, 127);
+    glVertex2f(130, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-Divider
+    glColor3ub(192, 192, 192);
+    glVertex2f(170, 152);
+    glVertex2f(165, 152);
+    glVertex2f(165, 127);
+    glVertex2f(170, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON); //roof-plate
+    glColor3ub(168, 169, 173);
+
+    glVertex2f(140, 152);
+    glVertex2f(190, 152);
+    glVertex2f(185, 157);
+    glVertex2f(140, 157);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-holder-front
+    glColor3ub(168, 169, 173);
+    glVertex2f(190, 152);
+    glVertex2f(215, 127);
+    glVertex2f(210, 127);
+    glVertex2f(185, 152);
+    glEnd();
+
+    glBegin(GL_POLYGON); //window-holder-back
+    glColor3ub(168, 169, 173);
+    glVertex2f(140, 157);
+    glVertex2f(115, 127);
+    glVertex2f(125, 127);
+    glVertex2f(140, 152);
+    glEnd();
+
+    glBegin(GL_POLYGON); //foot-holder
+    glColor3ub(168, 169, 173);
+    glVertex2f(242, 92);
+    glVertex2f(110, 92);
+    glVertex2f(110, 97);
+    glVertex2f(242, 97);
+
+    glEnd();
+
+    glBegin(GL_POLYGON);      //mirror
+    glColor3f(0.3, 0.9, 0.6); //body
+    glVertex2f(211.5, 134.5);
+    glVertex2f(204.5, 135.5);
+    glVertex2f(203.5, 129);
+    glVertex2f(210.5, 127);
+    glEnd();
+
+    glBegin(GL_POLYGON);      //Yellow-headlight
+    glColor3f(1.0, 1.0, 0.0); //body
+    glVertex2f(210.5 + 28, 134.5 - 10);
+    glVertex2f(203.5 + 28, 135.5 - 10);
+    glVertex2f(203.5 + 28, 129 - 10);
+    glVertex2f(210.5 + 28, 127 - 10);
+    glEnd();
+    if (!isDay)
+    {
+        glBegin(GL_POLYGON);      //Yellow-headlight
+        glColor3f(1.0, 1.0, 1.0); //body
+        glVertex2f(210.5 + 28 + 90, 134.5 - 10 - 0);
+        glVertex2f(205.5 + 28, 134.5 - 10);
+        glColor3f(0.8, 0.9, 0.0);
+        glVertex2f(205.5 + 28, 127 - 10);
+        glVertex2f(210.5 + 28 + 90, 127 - 10 - 30);
+        glEnd();
+    }
+
+    glBegin(GL_POLYGON); //window-opener-1
+    glColor3ub(192, 192, 192);
+    glVertex2f(150 - 15 - 5, 127 - 5 - 3);
+    glVertex2f(155 - 5 - 5, 127 - 5 - 3);
+    glVertex2f(155 - 5 - 5, 129 - 5);
+    glVertex2f(150 - 15 - 5, 129 - 5);
+    glEnd();
+    glBegin(GL_POLYGON); //window-opener-2
+    glColor3ub(192, 192, 192);
+    glVertex2f(150 - 15 + 40, 127 - 5 - 3);
+    glVertex2f(155 - 5 + 40, 127 - 5 - 3);
+    glVertex2f(155 - 5 + 40, 129 - 5);
+    glVertex2f(150 - 15 + 40, 129 - 5);
+    glEnd();
+}
+void CarThrust()
+{
+    glBegin(GL_POLYGON);
+    glColor3ub(168, 169, 173);
+    glVertex2f(110, 92);
+    glColor3ub(255, 255, 255);
+    glVertex2f(00, 80);
+    glVertex2f(00, 110);
+    glColor3ub(0, 0, 0);
+    glVertex2f(110, 97);
+    glEnd();
+}
+void fullCar()
+{
+
+    CarBody();
+    ScaledTire();
+    glPushMatrix();
+    glTranslatef(65, 0, 0);
+    ScaledTire();
+    glPopMatrix();
+}
+void CarForward()
+{
+    glLineWidth(1);
+
+    glTranslatef(-450.5, 0, 0);
+    fullCar();
+}
+void ScaledCarForward()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(10, 40, 0);
+    glScalef(0.5, 0.5, 0);
+    CarForward();
+    glPopMatrix();
+}
+void ScaledCarReverse()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef(10, 40, 0);
+    glScalef(-0.5, 0.5, 0);
+    CarForward();
+    glPopMatrix();
+}
+void MovingScaledCarForward()
+{
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glTranslatef((_carMove / 2) % 850, 0, 0);
+    ScaledCarForward();
+    glPopMatrix();
+}
+void MovingScaledCarReverse()
+{
+    glMatrixMode(GL_MODELVIEW);
+
+
+    glPushMatrix();
+    glTranslatef(600.5, 0, 0);
+    glTranslatef((-_carMove / 2) % 1000, 0, 0);
+
+    ScaledCarReverse();
+    glPopMatrix();
+}
+void TireRotate(int value)      //I009,I011
+{
+    if (isCarMoving) { TireRotateAngle -= 5.0f; }
+    glutPostRedisplay(); //Notify GLUT that the display has changed
+
+    glutTimerFunc(05, TireRotate, 0); //Notify GLUT to call update again in 25 milliseconds
+}
+
+void MoveCarForward(int value)          //I009,I011
+{
+    if (isCarMoving) {
+        _carMove += 1;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(20, MoveCarForward, 0);
+}
+
+
+
+void update(int value) //I001, I003-I008, I012, I015-018
+{
+
+    _angle1 += 1.0f;
+    glutPostRedisplay(); //Notify GLUT that the display has changed
+
+    glutTimerFunc(20, update, 0); //Notify GLUT to call update again in 25 milliseconds
+}
+
+
+void update1(int value)
+{
+    _angle2 -= 1.0f;
+    glutPostRedisplay(); //Notify GLUT that the display has changed
+    glutTimerFunc(20, update, 0); //Notify GLUT to call update again in 25 milliseconds
+}
+
+lass CityScape
+{
+public:
+    CityScape() {}
+    void fullCar()
+    {
+        CarBody();
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+
+        glTranslatef(142.5, 95.5, 0);
+        glRotatef(-_angle1, 0.0f, 0.0f, 1.0f);
+        glTranslatef(-142.5, -95.5, 0);
+        CarTire();
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(60, 0, 0);
+
+        glTranslatef(142.5, 95.5, 0);
+        glRotatef(-_angle1, 0.0f, 0.0f, 1.0f);
+        glTranslatef(-(142.5), -95.5, 0);
+        CarTire();
+        glPopMatrix();
+    }
+}
+    
+
+
 void Building()
     {
         glMatrixMode(GL_MODELVIEW);
