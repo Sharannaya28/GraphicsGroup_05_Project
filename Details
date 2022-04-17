@@ -1,0 +1,534 @@
+void Detail_1(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(45 + x, 5 + y);
+        glVertex2f(0 + x, 5 + y);
+        glVertex2f(0 + x, y);
+        glVertex2f(45 + x, y);
+        glEnd();
+    }
+    void Detail_2(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(55 + x, 10 + y);
+        glVertex2f(95 + x, 10 + y);
+        glVertex2f(95 + x, y);
+        glVertex2f(55 + x, y);
+        glEnd();
+    }
+    void Detail_3(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(97 + x, 3 + y);
+        glVertex2f(100 + x, 3 + y);
+        glVertex2f(100 + x, y);
+        glVertex2f(97 + x, y);
+        glEnd();
+    }
+
+    void Detail_4(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(7 + x, y + 180);
+        glVertex2f(7 + x, y + 315);
+        glVertex2f(x, y + 315);
+        glVertex2f(x, y + 180);
+        glEnd();
+    }
+    void Detail_5(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(170 + x, 5 + y);
+        glVertex2f(155 + x, 5 + y);
+        glVertex2f(155 + x, y);
+        glVertex2f(170 + x, y);
+        glEnd();
+    }
+    void Detail_6(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(3 + x, y + 180);
+        glVertex2f(3 + x, y + 295);
+        glVertex2f(x, y + 295);
+        glVertex2f(x, y + 180);
+        glEnd();
+    }
+    void Detail_7(float x, float y)
+    {
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(222 + x, 5 + y);
+        glVertex2f(205 + x, 5 + y);
+        glVertex2f(205 + x, y);
+        glVertex2f(222 + x, y);
+        glEnd();
+    }
+    void Details()
+    {
+        glMatrixMode(GL_MODELVIEW);
+
+        //Building_1//C001
+        glColor3ub(91, 0, 91);
+        glBegin(GL_POLYGON);
+        glVertex2f(0, 340);
+        glVertex2f(50, 340);
+        glVertex2f(50, 330);
+        glVertex2f(0, 330);
+        glEnd();
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(0, 320);
+        glVertex2f(40, 320);
+        glVertex2f(40, 330);
+        glVertex2f(0, 330);
+        glEnd();
+        for (int i = 180; i < 311; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_1(0, i);
+            }
+        }
+
+        //building_2//C002
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(50, 315);
+        glVertex2f(55, 315);
+        glVertex2f(55, 290);
+        glVertex2f(50, 290);
+        glEnd();
+        for (int i = 180; i < 281; i++)
+        {
+            if (i % 15 == 0)
+            {
+                Detail_2(0, i + 5);
+            }
+        }
+
+        //Building_3//C003
+        glColor3ub(91, 0, 91);
+        glBegin(GL_POLYGON);
+        glVertex2f(105, 330);
+        glVertex2f(120, 330);
+        glVertex2f(120, 320);
+        glVertex2f(105, 320);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(145, 330);
+        glVertex2f(130, 330);
+        glVertex2f(130, 320);
+        glVertex2f(145, 320);
+        glEnd();
+        for (int i = 290; i < 320; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(0, i);
+            }
+        }
+        for (int i = 280; i < 320; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(53, i);
+            }
+        }
+        for (int i = 100; i < 145; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_4(i + 1, 0);
+            }
+        }
+        //Building_4//C004
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(160, 288);
+        glVertex2f(175, 288);
+        glVertex2f(175, 280);
+        glVertex2f(160, 280);
+        glEnd();
+        for (int i = 180; i < 275; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_5(0, i);
+            }
+        }
+        //Building_5//C005
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(200, 305);
+        glVertex2f(173, 305);
+        glVertex2f(173, 300);
+        glVertex2f(200, 300);
+        glEnd();
+        for (int i = 175; i < 200; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_6(i + 1, 0);
+            }
+        }
+        //Building_6//C006
+        for (int i = 300; i < 350; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(100, i);
+            }
+        }
+        for (int i = 300; i < 350; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(153, i);
+            }
+        }
+        for (int i = 180; i < 350; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_7(0, i);
+            }
+        }
+        for (int i = 180; i < 350; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_7(24, i);
+            }
+        }
+
+        //Building_7//C013
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(250, 260);
+        glVertex2f(258, 260);
+        glVertex2f(258, 295);
+        glVertex2f(250, 295);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(253, 185);
+        glVertex2f(272, 185);
+        glVertex2f(272, 255);
+        glVertex2f(253, 255);
+        glEnd();
+
+        //Building_8//C008
+        glColor3ub(91, 0, 91);
+        glBegin(GL_POLYGON);
+        glVertex2f(275, 315);
+        glVertex2f(325, 315);
+        glVertex2f(325, 310);
+        glVertex2f(275, 310);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(275, 295);
+        glVertex2f(267, 295);
+        glVertex2f(267, 285);
+        glVertex2f(275, 285);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(275, 270);
+        glVertex2f(267, 270);
+        glVertex2f(267, 280);
+        glVertex2f(275, 280);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(325, 295);
+        glVertex2f(333, 295);
+        glVertex2f(333, 285);
+        glVertex2f(325, 285);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(325, 270);
+        glVertex2f(333, 270);
+        glVertex2f(333, 280);
+        glVertex2f(325, 280);
+        glEnd();
+
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(280, 300);
+        glVertex2f(320, 300);
+        glVertex2f(320, 310);
+        glVertex2f(280, 310);
+        glEnd();
+        for (int i = 275; i < 325; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_6(i + 1, 0);
+            }
+        }
+
+        //Building_9//C009
+        glPushMatrix();
+        glTranslatef(92, 0, 0);
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(250, 260);
+        glVertex2f(258, 260);
+        glVertex2f(258, 295);
+        glVertex2f(250, 295);
+        glEnd();
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(75, 0, 0);
+        glBegin(GL_POLYGON);
+        glVertex2f(253, 185);
+        glVertex2f(272, 185);
+        glVertex2f(272, 255);
+        glVertex2f(253, 255);
+        glEnd();
+        glPopMatrix();
+
+        //Building_10//C010
+        glPushMatrix();
+        glTranslatef(203, 0, 0);
+        for (int i = 300; i < 350; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(100, i);
+            }
+        }
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(97, 0, 0);
+        for (int i = 300; i < 350; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(153, i);
+            }
+        }
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(150, 0, 0);
+        for (int i = 180; i < 350; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_7(0, i);
+            }
+        }
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(150, 0, 0);
+        for (int i = 180; i < 350; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_7(24, i);
+            }
+        }
+        glPopMatrix();
+        //Building_11//C011
+        glPushMatrix();
+        glTranslatef(227, 0, 0);
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(200, 305);
+        glVertex2f(173, 305);
+        glVertex2f(173, 300);
+        glVertex2f(200, 300);
+        glEnd();
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef(225, 0, 0);
+        for (int i = 175; i < 200; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_6(i + 1, 0);
+            }
+        }
+        glPopMatrix();
+        //Building_12//C012
+        glPushMatrix();
+        glTranslatef(275, 0, 0);
+        glColor3ub(55, 0, 55);
+        glBegin(GL_POLYGON);
+        glVertex2f(160, 288);
+        glVertex2f(175, 288);
+        glVertex2f(175, 280);
+        glVertex2f(160, 280);
+        glEnd();
+        for (int i = 180; i < 275; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_5(0, i);
+            }
+        }
+        glPopMatrix();
+        //Building_13//C014
+        glPushMatrix();
+        glTranslatef(350, 0, 0);
+        glColor3ub(91, 0, 91);
+        glBegin(GL_POLYGON);
+        glVertex2f(105, 330);
+        glVertex2f(120, 330);
+        glVertex2f(120, 320);
+        glVertex2f(105, 320);
+        glEnd();
+        glBegin(GL_POLYGON);
+        glVertex2f(145, 330);
+        glVertex2f(130, 330);
+        glVertex2f(130, 320);
+        glVertex2f(145, 320);
+        glEnd();
+        for (int i = 290; i < 320; i++)
+        {
+            if (i % 5 == 0)
+            {
+                Detail_3(0, i);
+            }
+        }
+        for (int i = 100; i < 145; i++)
+        {
+            if (i % 10 == 0)
+            {
+                Detail_4(i + 1, 0);
+            }
+        }
+        glPopMatrix();
+    }
+    void CarTire()
+    {
+        //Tires
+        glBegin(GL_POLYGON); //tire-1
+        glLineWidth(7.5);
+        for (int i = 0; i < 200; i++)
+        {
+
+            glColor3ub(0, 0, 0);
+            float pi = 3.1416;
+            float A = (i * 2 * pi) / 200;
+            float r = 2.5;
+            float x = r * cos(A);
+            float y = r * sin(A);
+            //glVertex2f(x,y);
+            glVertex2f((140 + (x * 5)), (93 + (y * 5)));
+        }
+        glEnd();
+        //Point
+        // 140=140+200;
+
+        glBegin(GL_POLYGON);
+        glLineWidth(7.5);
+        for (int i = 0; i < 200; i++)
+        {
+
+            glColor3ub(168, 169, 173); //steel-cover
+            float pi = 3.1416;
+            float A = (i * 2 * pi) / 200;
+            float r = 1.5;
+            float x = (140 + (r * 5 * cos(A)));
+            float y = (93 + (r * 5 * sin(A)));
+            glVertex2f(x, y);
+        }
+        glEnd();
+        //140=140+200;
+        //points
+        glColor3f(1.0, 0.0, 0.0);
+        glPointSize(5.0);
+        glBegin(GL_POINTS);
+        glVertex2f(140.0, 93.0);
+        glVertex2f(140.0 + 5, 93.0);
+        glVertex2f(140.0 - 5, 93.0);
+        glVertex2f(140.0, 93.0 + 10);
+        glVertex2f(140.0, 93.0 - 10);
+        glEnd();
+    }
+    void CarBody()
+    {
+        glColor3f(1.0, 0.5725, 0.5529); //body
+        glBegin(GL_POLYGON);
+        glVertex2f(140, 152);
+        glVertex2f(190, 152);
+        glVertex2f(215, 127);
+        glVertex2f(240, 127);
+        glVertex2f(240, 92);
+        glVertex2f(110, 92);
+        glVertex2f(110, 127);
+        glVertex2f(130, 127);
+        glVertex2f(140, 152);
+        glEnd();
+
+        glBegin(GL_POLYGON); //back-light
+        glColor3ub(255, 0, 0);
+        glVertex2f(110, 92);
+        glVertex2f(115, 92);
+        glVertex2f(115, 117);
+        glVertex2f(110, 117);
+        glEnd();
+
+        glBegin(GL_POLYGON); //window
+        glColor3ub(0, 0, 0);
+        glVertex2f(140, 152);
+        glVertex2f(190, 152);
+        glVertex2f(215, 127);
+        glVertex2f(210, 127);
+        glVertex2f(120, 127);
+        glVertex2f(130, 127);
+        glEnd();
+
+        glBegin(GL_POLYGON); //window-Divider
+        glColor3ub(192, 192, 192);
+        glVertex2f(170, 152);
+        glVertex2f(165, 152);
+        glVertex2f(165, 127);
+        glVertex2f(170, 127);
+        glEnd();
+
+        glBegin(GL_POLYGON); //roof-plate
+        glColor3ub(168, 169, 173);
+
+        glVertex2f(140, 152);
+        glVertex2f(190, 152);
+        glVertex2f(185, 157);
+        glVertex2f(140, 157);
+        glEnd();
+
+        glBegin(GL_POLYGON); //window-holder-front
+        glColor3ub(168, 169, 173);
+        glVertex2f(190, 152);
+        glVertex2f(215, 127);
+        glVertex2f(210, 127);
+        glVertex2f(185, 152);
+        glEnd();
+
+        glBegin(GL_POLYGON); //window-holder-back
+        glColor3ub(168, 169, 173);
+        glVertex2f(140, 157);
+        glVertex2f(115, 127);
+        glVertex2f(125, 127);
+        glVertex2f(140, 152);
+        glEnd();
+
+        glBegin(GL_POLYGON); //foot-holder
+        glColor3ub(168, 169, 173);
+        glVertex2f(215, 92);
+        glVertex2f(110, 92);
+        glVertex2f(110, 97);
+        glVertex2f(215, 97);
+
+        glEnd();
+
+        glBegin(GL_POLYGON); //mirror
+        glVertex2f(211.5, 134.5);
+        glVertex2f(204.5, 135.5);
+        glVertex2f(203.5, 129);
+        glVertex2f(210.5, 127);
+        glEnd();
+    }
